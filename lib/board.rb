@@ -30,12 +30,42 @@ class Board
   end
 
   def make_move(start_pos, current_player_name)
-    number_to_move = @cups[start_pos].length
-    
+    #6 = player1 store, 13 = player2 store
+    #player.side tells you whether 6 or 13 is own cup
+    #Board goes 0, 1, 2, 3, 4, 5, [6], 7, 8, 9, 10, 11, 12, [13]
+    #Each cup within the board is an array of stones
+    stones_left = @cups[start_pos].length
+    index = start_pos + 1
+    while stones_left > 0
+      if index > 14
+        index -=14
+      end
+      if start_pos < 6
+        if index == 13
+          index += 1
+        else
+          temp = @cups[start_pos].pop
+          @cups[index] << temp
+          stones_left -= 1
+          index += 1
+        end
+      else
+        if index == 6
+          j += 1
+        else
+          temp = @cups[start_pos].pop
+          @cups[index] << temp
+          stones_left -= 1
+          index += 1
+        end
+      end
+    end
+
   end
 
   def next_turn(ending_cup_idx)
     # helper method to determine whether #make_move returns :switch, :prompt, or ending_cup_idx
+
   end
 
   def render
