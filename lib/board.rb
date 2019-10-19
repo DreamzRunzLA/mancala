@@ -4,6 +4,8 @@ class Board
   def initialize(name1, name2)
     @cups = Array.new(14) {Array.new()}
     place_stones
+    @name1 = name1
+    @name2 = name2
   end
 
   def place_stones
@@ -37,10 +39,10 @@ class Board
     stones_left = @cups[start_pos].length
     index = start_pos + 1
     while stones_left > 0
-      if index > 14
+      if index >= 14
         index -=14
       end
-      if start_pos < 6
+      if current_player_name == @name1
         if index == 13
           index += 1
         else
@@ -51,7 +53,7 @@ class Board
         end
       else
         if index == 6
-          j += 1
+          index += 1
         else
           temp = @cups[start_pos].pop
           @cups[index] << temp
@@ -60,12 +62,19 @@ class Board
         end
       end
     end
-
+    render
+    next_turn(index - 1)
   end
 
   def next_turn(ending_cup_idx)
     # helper method to determine whether #make_move returns :switch, :prompt, or ending_cup_idx
-
+    if ending_cup_idx == 6 || ending_cup_idx == 13
+      return :prompt
+    elsif @cups[ending_cup_idx].length > 1
+      return ending_cup_idx
+    else
+      return :switch
+    end
   end
 
   def render
@@ -77,8 +86,16 @@ class Board
   end
 
   def one_side_empty?
+    (0..5).to_a.all? { |idx| @cups[idx].length == 0 } || (7..12).to_a.all? { |idx| @cups[idx].length == 0 }
   end
 
   def winner
+    if @cups[6].length > @cups[13].length
+      return @name1
+    elsif @cups[6].length < @cups[13].length
+      return @name2
+    else
+      return :draw
+    end
   end
 end
