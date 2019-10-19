@@ -24,10 +24,10 @@ class Board
   def valid_move?(start_pos)
     if start_pos < 0 || start_pos > 13
       raise "Invalid starting cup"
-    elsif @cups[start_pos]
+    elsif @cups[start_pos].length == 0
       raise "Starting cup is empty"
     else
-      return
+      return true
     end
   end
 
